@@ -14,17 +14,43 @@ angular.module('listings').controller('ListingsController', ['$scope', 'Listings
 	  *Save the article using the Listings factory. If the object is successfully 
 	  saved redirect back to the list page. Otherwise, display the error
 	 */
+	 Listings.create($scope.newListing).then(function(err){
+		 if(err){
+			 console.log(err);
+		 } else {
+			 $scope.newListing.name = '';
+			 $scope.newListing.address = '';
+			 $scope.newListing.code = '';
+			 next();
+		 }
+	 });
+	 
+	 Listings.getAll().then(function(response) {
+		 $scope.listings = response.data;
+	 });
     };
 
     $scope.deleteListing = function(id) {
-	   /**TODO
+      /**TODO
         Delete the article using the Listings factory. If the removal is successful, 
 		navigate back to 'listing.list'. Otherwise, display the error. 
-       */
+     */
+	 Listings.delete(id).then(function(err){
+		 if(err){
+			 console.log(err);
+		 } else {
+			 next();
+		 }
+	 });
+	 
+	 Listings.getAll().then(function(response) {
+      $scope.listings = response.data;
+	 });
+	 
     };
 
     $scope.showDetails = function(index) {
-      $scope.detailedInfo = $scope.listings[index];
+      $scope.detailedInfo = $scope.listings[$scope.listings.indexOf(index)];
     };
   }
 ]);

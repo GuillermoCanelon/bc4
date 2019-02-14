@@ -42,7 +42,20 @@ exports.update = function(req, res) {
 
   /** TODO **/
   /* Replace the article's properties with the new properties found in req.body */
-  /* Save the article */
+  /* Save the article */  
+  
+	listing.code = req.body.code;
+	listing.name = req.body.name;
+	listing.address = req.body.address;
+		  
+	listing.save(function(err, data){
+	  if(err){
+		 res.status(404).send(err);
+	  } else {
+		 res.status(200).send(data); 
+	  }
+	  
+	});
 };
 
 /* Delete a listing */
@@ -51,12 +64,28 @@ exports.delete = function(req, res) {
 
   /** TODO **/
   /* Remove the article */
+  Listing.remove(listing).exec(function(err, data){
+	  if(err){
+		  res.status(404).send(err);
+	  } else {
+		  res.status(200).send(data);
+	  }
+	  
+  });
 };
 
 /* Retreive all the directory listings, sorted alphabetically by listing code */
 exports.list = function(req, res) {
   /** TODO **/
   /* Your code here */
+  Listing.find({}).sort('code').exec(function(err, data) {
+	  if(err){
+		  res.status(404).send(err);
+	  }
+	  else{
+		  res.status(200).send(data);
+	  }
+  });
 };
 
 /* 
